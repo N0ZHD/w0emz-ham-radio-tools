@@ -350,10 +350,10 @@
                 <div class="flex items-center gap-3 mt-5">
                     <button onclick="playMorse()" id="cwPlayBtn" class="flex-1 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow transition">
                         <i data-lucide="play" class="w-4 h-4"></i>
-                        <span>Transmit CW Audio</span>
+                        <span id="cwPlayLabel">Transmit CW Audio</span>
                     </button>
                     <button onclick="stopMorse()" class="px-4 py-2.5 rounded-lg bg-tactical-800 hover:bg-tactical-700 text-slate-300 font-bold text-xs transition">
-                        Stop
+                        Stop Audio
                     </button>
                 </div>
             </div>
@@ -574,7 +574,29 @@
         let showFavoritesOnly = false;
         let soundEnabled = true;
         let selectedKitApps = new Set(KIT_PRESETS.pota.apps);
-        let favorites = JSON.parse(localStorage.getItem('w0emz_favorites') || '[]');
+        // Storage is optional: privacy settings or a malformed saved value must never stop the directory.
+        let favorites = (() => {
+            try {
+                const saved = JSON.parse(window.localStorage.getItem('w0emz_favorites') || '[]');
+                return Array.isArray(saved) ? saved : [];
+            } catch (error) {
+                return [];
+            }
+        })();
+
+        function saveFavorites() {
+            try {
+                window.localStorage.setItem('w0emz_favorites', JSON.stringify(favorites));
+            } catch (error) {
+                // Favorites remain usable for this visit even when browser storage is unavailable.
+            }
+        }
+
+        function refreshIcons() {
+            if (window.lucide && typeof window.lucide.createIcons === 'function') {
+                window.lucide.createIcons();
+            }
+        }
 
         // AUDIO CONTEXT FOR CW
         let audioCtx = null;
@@ -583,13 +605,19 @@
 
         // INITIALIZATION
         window.addEventListener('DOMContentLoaded', () => {
-            initClock();
-            initFilterButtons();
-            applyFilters();
-            renderKitChecklist();
-            updateFavBadge();
-            lucide.createIcons();
-            initMorseWatcher();
+            try { initClock(); } catch (error) { console.warn('Clock could not initialize:', error); }
+            try { initFilterButtons(); } catch (error) { console.error('Directory filters could not initialize:', error); }
+            try { applyFilters(); } catch (error) {
+                console.error('Directory could not render:', error);
+                const grid = document.getElementById('appGrid');
+                const noResults = document.getElementById('noResults');
+                if (grid) grid.innerHTML = '<p class="text-sm text-amber-300">The directory could not load. Please refresh the page or contact the club website administrator.</p>';
+                if (noResults) noResults.classList.add('hidden');
+            }
+            try { renderKitChecklist(); } catch (error) { console.warn('Kit checklist could not initialize:', error); }
+            try { updateFavBadge(); } catch (error) { console.warn('Favorites badge could not initialize:', error); }
+            refreshIcons();
+            try { initMorseWatcher(); } catch (error) { console.warn('CW input watcher could not initialize:', error); }
         });
 
         // LIVE STATION CLOCKS
@@ -616,7 +644,7 @@
             const activeBtn = document.getElementById(`tab-${tabId}`);
             activeBtn.classList.add('bg-blue-600', 'text-white', 'shadow');
             activeBtn.classList.remove('text-slate-400');
-            lucide.createIcons();
+            refreshIcons();
         }
 
         // AUDIO EFFECTS (Sidetone & UI Click)
@@ -851,7 +879,7 @@
                 `;
             }).join('');
 
-            lucide.createIcons();
+            refreshIcons();
         }
 
         function getLicenseBadge(price) {
@@ -867,7 +895,7 @@
             } else {
                 favorites.push(id);
             }
-            localStorage.setItem('w0emz_favorites', JSON.stringify(favorites));
+            saveFavorites();
             updateFavBadge();
             applyFilters();
         }
@@ -960,7 +988,9 @@
 
             const ctx = getAudioContext();
             isMorsePlaying = true;
-            document.getElementById('cwPlayBtn').classList.add('bg-amber-600', 'animate-pulse');
+            const playButton = document.getElementById('cwPlayBtn');
+            playButton.classList.add('bg-amber-600', 'animate-pulse');
+            document.getElementById('cwPlayLabel').textContent = 'Playing CW…';
 
             let currentTime = ctx.currentTime + 0.05;
             const code = textToMorse(text);
@@ -1013,6 +1043,8 @@
             morseTimeouts = [];
             isMorsePlaying = false;
             document.getElementById('cwPlayBtn').classList.remove('bg-amber-600', 'animate-pulse');
+            const playLabel = document.getElementById('cwPlayLabel');
+            if (playLabel) playLabel.textContent = 'Transmit CW Audio';
             if (audioCtx) {
                 audioCtx.close();
                 audioCtx = null;
