@@ -53,7 +53,7 @@
 
 
         .accordion-panel { background: rgba(12,20,36,.92); border: 1px solid #1e3a6d; border-radius: 14px; overflow: hidden; box-shadow: 0 8px 24px rgba(0,0,0,.18); }
-        .accordion-summary { list-style: none; cursor: pointer; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 20px; color:#f8fafc; font-weight:700; font-size:14px; background:linear-gradient(110deg,rgba(19,33,60,.95),rgba(12,20,36,.95)); }
+        .accordion-summary { list-style: none; cursor: pointer; display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 20px; color:#f8fafc; font-weight:700; font-size:14px; background:linear-gradient(180deg,rgba(19,33,60,.95),rgba(12,20,36,.95)); }
         .accordion-summary::-webkit-details-marker { display:none; }
         .accordion-summary small { display:block; color:#94a3b8; font-size:11px; font-weight:400; margin:4px 0 0 34px; }
         .section-kicker { display:inline-flex; align-items:center; justify-content:center; width:25px; height:25px; border-radius:6px; margin-right:8px; color:#67e8f9; background:#082f49; border:1px solid #155e75; font:700 10px monospace; }
@@ -171,7 +171,7 @@
             <div class="flex flex-col md:flex-row gap-3 items-center justify-between mb-4">
                 <div class="relative w-full md:flex-1">
                     <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3.5 text-slate-400"></i>
-                    <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Search apps (e.g. FT8, NBEMS, POTA, Satellite, APRS, Morse)..." class="w-full pl-10 pr-4 py-2.5 bg-tactical-950 border border-tactical-border rounded-lg text-xs text-white focus:outline-none focus:border-cyan-400 transition">
+                    <input type="text" id="searchInput" oninput="applyFilters()" placeholder="Search apps (e.g. FT8, NBEMS, POTA, Satellite, APRS, Morse)..." class="w-full pl-10 pr-4 py-2.5 bg-tactical-950 border border-tactical-border rounded-lg text-sm text-white focus:outline-none focus:border-cyan-400 transition">
                 </div>
                 <div class="flex items-center gap-2 w-full md:w-auto">
                     <select id="pricingFilter" onchange="applyFilters()" class="bg-tactical-950 border border-tactical-border rounded-lg px-3 py-2.5 text-xs text-slate-300 focus:outline-none focus:border-cyan-400">
@@ -180,7 +180,7 @@
                         <option value="freemium">Freemium / Demo</option>
                         <option value="paid">Commercial Paid</option>
                     </select>
-                    <button onclick="toggleFavoritesOnly()" id="favToggleBtn" class="px-3 py-2.5 bg-tactical-950 hover:bg-tactical-800 border border-tactical-border rounded-lg text-xs font-semibold text-amber-300 flex items-center gap-1.5 transition">
+                    <button onclick="toggleFavoritesOnly()" id="favToggleBtn" class="px-3 py-2.5 bg-tactical-950 hover:bg-tactical-800 border border-tactical-border rounded-lg text-xs font-semibold text-slate-300 flex items-center gap-1.5 transition">
                         <i data-lucide="star" class="w-3.5 h-3.5"></i>
                         <span>Shack Favorites (<span id="favCount">0</span>)</span>
                     </button>
@@ -188,7 +188,9 @@
             </div>
             <div class="space-y-2">
                 <div class="text-[10px] font-mono uppercase tracking-wider text-slate-400">Category Filter:</div>
-                <div class="flex gap-1.5 overflow-x-auto pb-1 custom-scroll" id="catBtnContainer"></div>
+                <div class="flex gap-1.5 overflow-x-auto pb-1 custom-scroll">
+                    <select id="categoryFilter" onchange="setCategory(this.value)" class="w-full md:w-auto bg-tactical-950 border border-tactical-border rounded-lg px-3 py-2.5 text-xs text-slate-300 focus:outline-none focus:border-cyan-400"></select>
+                </div>
             </div>
             <div class="space-y-2 mt-3 pt-3 border-t border-tactical-border/60">
                 <div class="text-[10px] font-mono uppercase tracking-wider text-slate-400">Platform Filter:</div>
@@ -243,8 +245,8 @@
             <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-tactical-border">
                 <div><h3 class="font-bold text-sm text-white" id="currentKitTitle">Custom Field Station Bundle</h3><p class="text-xs text-slate-400">Selected apps in this profile (<span id="kitSelectedCount">0</span>)</p></div>
                 <div class="flex items-center gap-2">
-                    <button onclick="copyKitList()" class="px-3 py-1.5 rounded bg-tactical-800 hover:bg-tactical-700 text-xs font-semibold text-cyan-300 border border-tactical-border flex items-center gap-1.5 transition"><i data-lucide="copy" class="w-3.5 h-3.5"></i><span>Copy Checklist</span></button>
-                    <button onclick="exportKitJSON()" class="px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white flex items-center gap-1.5 shadow transition"><i data-lucide="download" class="w-3.5 h-3.5"></i><span>Export JSON</span></button>
+                    <button onclick="copyKitList()" class="px-3 py-1.5 rounded bg-tactical-800 hover:bg-tactical-700 text-xs font-semibold text-cyan-300 border border-tactical-border flex items-center gap-1.5 transition"><i data-lucide="copy" class="w-3.5 h-3.5"></i>Copy Checklist</button>
+                    <button onclick="exportKitJSON()" class="px-3 py-1.5 rounded bg-blue-600 hover:bg-blue-500 text-xs font-semibold text-white flex items-center gap-1.5 shadow transition"><i data-lucide="download" class="w-3.5 h-3.5"></i>Export JSON</button>
                 </div>
             </div>
             <div id="kitItemsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4"></div>
@@ -270,11 +272,11 @@
                             <div class="flex-1"><label class="text-[11px] font-mono text-slate-400 block mb-1">Speed: <span id="wpmDisplay" class="text-cyan-400 font-bold">18</span> WPM</label><input type="range" id="wpmSlider" min="5" max="35" value="18" oninput="document.getElementById('wpmDisplay').innerText = this.value" class="w-full accent-cyan-400"></div>
                             <div class="flex-1"><label class="text-[11px] font-mono text-slate-400 block mb-1">Tone: <span id="toneDisplay" class="text-amber-400 font-bold">700</span> Hz</label><input type="range" id="toneSlider" min="400" max="900" step="50" value="700" oninput="document.getElementById('toneDisplay').innerText = this.value" class="w-full accent-amber-400"></div>
                         </div>
-                        <div id="morseCodeOutput" class="p-3 bg-tactical-950 rounded border border-tactical-border font-mono text-xs text-amber-300 tracking-widest break-all min-h-[42px]">-.-. --.- / -.-. --.- / -.. . / .-- ----- . -- --.. / -.-</div>
+                        <div id="morseCodeOutput" class="p-3 bg-tactical-950 rounded border border-tactical-border font-mono text-xs text-amber-300 tracking-widest break-all min-h-[42px]">-.-. --.-. ..-. ..- .-.. .-..</div>
                     </div>
                 </div>
                 <div class="flex items-center gap-3 mt-5">
-                    <button onclick="playMorse()" id="cwPlayBtn" class="flex-1 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 shadow transition"><i data-lucide="play" class="w-4 h-4"></i><span>Transmit CW Audio</span></button>
+                    <button onclick="playMorse()" id="cwPlayBtn" class="flex-1 py-2.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition"><i data-lucide="play" class="w-4 h-4"></i>Transmit CW Audio</button>
                     <button onclick="stopMorse()" class="px-4 py-2.5 rounded-lg bg-tactical-800 hover:bg-tactical-700 text-slate-300 font-bold text-xs transition">Stop</button>
                 </div>
             </div>
@@ -283,16 +285,16 @@
                     <h3 class="text-base font-bold text-white flex items-center gap-2 mb-3"><i data-lucide="compass" class="w-5 h-5 text-cyan-400"></i>Maidenhead Grid & Beam Heading Tool</h3>
                     <p class="text-xs text-slate-400 mb-4">Calculate exact distance (miles & km) and true azimuth rotator heading between your station and any DX grid.</p>
                     <div class="grid grid-cols-2 gap-3 mb-4">
-                        <div><label class="text-[11px] font-mono text-slate-400 block mb-1">My Grid (QTH):</label><input type="text" id="myGridInput" value="EN16wt" maxlength="6" class="w-full px-3 py-2 bg-tactical-950 border border-tactical-border rounded-lg text-xs font-mono uppercase text-emerald-400"></div>
-                        <div><label class="text-[11px] font-mono text-slate-400 block mb-1">Target DX Grid:</label><input type="text" id="targetGridInput" value="FN31" maxlength="6" class="w-full px-3 py-2 bg-tactical-950 border border-tactical-border rounded-lg text-xs font-mono uppercase text-cyan-300"></div>
+                        <div><label class="text-[11px] font-mono text-slate-400 block mb-1">My Grid (QTH):</label><input type="text" id="myGridInput" value="EN16wt" maxlength="6" class="w-full px-3 py-2 bg-tactical-950 border border-tactical-border rounded-lg text-xs text-emerald-300 font-mono uppercase focus:outline-none focus:border-cyan-400"></div>
+                        <div><label class="text-[11px] font-mono text-slate-400 block mb-1">Target DX Grid:</label><input type="text" id="targetGridInput" value="FN31" maxlength="6" class="w-full px-3 py-2 bg-tactical-950 border border-tactical-border rounded-lg text-xs text-cyan-300 font-mono uppercase focus:outline-none focus:border-cyan-400"></div>
                     </div>
                     <div class="grid grid-cols-3 gap-2 text-center font-mono">
-                        <div class="p-3 rounded bg-tactical-950 border border-tactical-border"><span class="text-[10px] text-slate-400 block">AZIMUTH</span><span id="resBearing" class="text-sm font-bold text-amber-400">101° ESE</span></div>
-                        <div class="p-3 rounded bg-tactical-950 border border-tactical-border"><span class="text-[10px] text-slate-400 block">MILES</span><span id="resMiles" class="text-sm font-bold text-cyan-400">1,085 mi</span></div>
+                        <div class="p-3 rounded bg-tactical-950 border border-tactical-border"><span class="text-[10px] text-slate-400 block">AZIMUTH</span><span id="resBearing" class="text-sm font-bold text-amber-300">102° ESE</span></div>
+                        <div class="p-3 rounded bg-tactical-950 border border-tactical-border"><span class="text-[10px] text-slate-400 block">MILES</span><span id="resMiles" class="text-sm font-bold text-cyan-300">1,085 mi</span></div>
                         <div class="p-3 rounded bg-tactical-950 border border-tactical-border"><span class="text-[10px] text-slate-400 block">KM</span><span id="resKm" class="text-sm font-bold text-white">1,746 km</span></div>
                     </div>
                 </div>
-                <button onclick="calculateBearing()" class="w-full mt-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition"><i data-lucide="navigation" class="w-4 h-4"></i><span>Calculate Beam Bearing</span></button>
+                <button onclick="calculateBearing()" class="w-full mt-4 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs flex items-center justify-center gap-2 transition"><i data-lucide="navigation" class="w-4 h-4"></i>Calculate Beam Bearing</button>
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -300,9 +302,9 @@
                 <h4 class="text-xs font-bold text-amber-400 font-mono uppercase mb-3 flex items-center gap-1.5"><i data-lucide="book-open" class="w-4 h-4"></i> Essential Amateur Q-Codes</h4>
                 <div class="grid grid-cols-2 gap-2 text-xs font-mono">
                     <div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QTH:</b> Station Location</div><div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QSL:</b> Acknowledge / Confirm</div>
-                    <div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QSO:</b> Radio Conversation</div><div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QRM:</b> Man-Made Interference</div>
-                    <div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QRN:</b> Natural Static Noise</div><div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QSY:</b> Change Frequency</div>
-                    <div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QRO/QRP:</b> Increase / Low Power</div><div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QRZ?:</b> Who is calling me?</div>
+                    <div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QSO:</b> Radio Conversation</div><div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QRM:</b> Interference</div>
+                    <div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QRN:</b> Natural Static Noise</div><div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QSB:</b> Signal Fading</div>
+                    <div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QSY:</b> Change Frequency</div><div class="p-2 bg-tactical-950 rounded border border-tactical-border/50"><b class="text-cyan-300">QRO/QRP:</b> Increase / Low Power</div>
                 </div>
             </div>
             <div class="bg-tactical-900 border border-tactical-border rounded-xl p-5">
@@ -336,11 +338,11 @@
     <script>
         const APPS_DATABASE = [
             { id: "wsjtx", name: "WSJT-X", cat: "Digital Modes", platforms: ["windows", "linux", "macos"], price: "free", desc: "The gold standard for FT8, FT4, Q65 and weak DX protocols.", url: "https://wsjt.sourceforge.io/wsjtx.html" },
-            { id: "js8call", name: "JS8Call", cat: "Digital Modes", platforms: ["windows", "linux", "macos"], price: "free", desc: "Keyboard-to-keyboard ragchew messaging and relays built on FT8 modulation.", url: "http://js8call.com/" },
-            { id: "fldigi", name: "fldigi / NBEMS", cat: "Digital Modes", platforms: ["windows", "linux", "macos"], price: "free", desc: "Multi-mode digital modem (PSK31, RTTY, Olivia) with flmsg ICS message forms.", url: "http://www.w1hkj.com/" },
+            { id: "js8call", name: "JS8Call", cat: "Digital Modes", platforms: ["windows", "linux", "macos"], price: "free", desc: "Keyboard-to-keyboard ragchew messaging and relays built on FT8 modulation.", url: "https://js8call.com/" },
+            { id: "fldigi", name: "fldigi / NBEMS", cat: "Digital Modes", platforms: ["windows", "linux", "macos"], price: "free", desc: "Multi-mode digital modem (PSK31, RTTY, Olivia) with flmsg ICS message formats.", url: "http://www.w1hkj.com/" },
             { id: "jtdx", name: "JTDX", cat: "Digital Modes", platforms: ["windows", "linux"], price: "free", desc: "Optimized FT8/FT4 decoder for crowded bands and weak DX reception.", url: "https://www.jtdx.tech/" },
             { id: "varac", name: "VarAC", cat: "Digital Modes", platforms: ["windows"], price: "free", desc: "HF keyboard chat and file transfer application over VARA HF modems.", url: "https://www.varac-hamradio.com/" },
-            { id: "ft8cn", name: "FT8CN", cat: "Digital Modes", platforms: ["android"], price: "free", desc: "Complete native FT8 decoder/transmitter on Android phones via USB OTG or audio cable.", url: "https://github.com/n0boy/ft8cn" },
+            { id: "ft8cn", name: "FT8CN", cat: "Digital Modes", platforms: ["android"], price: "free", desc: "Complete native FT8 decoder/transmitter on Android phones via USB OTG or audio cable.", url: "https://github.com/N0BOY/ft8cn" },
             { id: "qft8", name: "qFT8 / SimpleFT8", cat: "Digital Modes", platforms: ["android"], price: "free", desc: "Lightweight FT8/FT4 receive and transmit with direct CAT rig control on Android.", url: "https://github.com/kg5d/qFT8" },
             { id: "pocketft8", name: "Pocket FT8", cat: "Digital Modes", platforms: ["ios", "macos"], price: "free", desc: "Full FT8 transceiver with logbook for iOS, iPadOS and Apple Silicon Mac.", url: "https://apps.apple.com/us/app/pocket-ft8/id1573031024" },
             { id: "ftham", name: "FT Ham", cat: "Digital Modes", platforms: ["ios"], price: "freemium", desc: "iOS audio DSP decoder and transmitter for FT8/FT4 with live waterfall display.", url: "https://ftham.turrion.dev/" },
@@ -348,18 +350,18 @@
             { id: "winlink", name: "Winlink Express", cat: "Emergency", platforms: ["windows"], price: "free", desc: "Worldwide radio email messaging system operating over HF VARA, Packet, and Telnet.", url: "https://www.winlink.org/" },
             { id: "pat", name: "Pat Winlink", cat: "Emergency", platforms: ["windows", "linux", "macos"], price: "free", desc: "Modern, open-source cross-platform Winlink client accessible via standard web browser.", url: "https://getpat.io/" },
             { id: "log4om", name: "Log4OM", cat: "Logging", platforms: ["windows"], price: "free", desc: "Rich general logger with dual-radio CAT control, awards, and automatic web uploads.", url: "https://www.log4om.com/" },
-            { id: "n1mm", name: "N1MM Logger+", cat: "Logging", platforms: ["windows"], price: "free", desc: "The definitive open contest logging engine supporting CW, SSB, and digital competitions.", url: "https://n1mm.hamdocs.com/" },
+            { id: "n1mm", name: "N1MM Logger+", cat: "Logging", platforms: ["windows"], price: "free", desc: "The definitive open contest logging engine supporting CW, SSB, and digital competition.", url: "https://n1mm.hamdocs.com/" },
             { id: "n3fjp", name: "N3FJP Software", cat: "Logging", platforms: ["windows"], price: "paid", desc: "ACLog and the beloved ARRL Field Day, Winter Field Day, and State QSO Party suites.", url: "https://www.n3fjp.com/" },
             { id: "dxlab", name: "DXLab Suite", cat: "Logging", platforms: ["windows"], price: "free", desc: "8-module interoperable powerhouse for DXing, automated spotting, and QSL chasing.", url: "https://www.dxlabsuite.com/" },
             { id: "hrd", name: "Ham Radio Deluxe", cat: "Logging", platforms: ["windows"], price: "paid", desc: "Commercial integrated package: CAT rig control, DX logbook, digital modem & rotors.", url: "https://www.ham-radio-deluxe.com/" },
             { id: "logger32", name: "Logger32", cat: "Logging", platforms: ["windows"], price: "free", desc: "Highly customizable 32-bit Windows logger with telnet DX cluster and real-time maps.", url: "https://www.logger32.net/" },
             { id: "cqrlog", name: "CQRLOG", cat: "Logging", platforms: ["linux"], price: "free", desc: "Advanced Linux logging system powered by MySQL and Hamlib rig control backend.", url: "https://www.cqrlog.com/" },
-            { id: "klog", name: "KLog", cat: "Logging", platforms: ["linux", "windows"], price: "free", desc: "Open-source cross-platform logger built with Qt for Linux and Windows operators.", url: "https://www.klog.karloph.com/" },
+            { id: "klog", name: "KLog", cat: "Logging", platforms: ["linux", "windows"], price: "free", desc: "Open-source cross-platform logger built with Qt for Linux and Windows operators.", url: "https://www.klog.xyz/" },
             { id: "not1mm", name: "Not1MM", cat: "Logging", platforms: ["linux"], price: "free", desc: "Contest logging application developed natively for Linux workstations.", url: "https://github.com/mbridak/not1mm" },
             { id: "wavelog", name: "Wavelog", cat: "Logging", platforms: ["web"], price: "free", desc: "Modern self-hosted PHP/MySQL online logbook; great for shared club call stations.", url: "https://www.wavelog.org/" },
             { id: "cloudlog", name: "Cloudlog", cat: "Logging", platforms: ["web"], price: "free", desc: "Modern cloud-native web logging platform accessible from phone, tablet, and PC.", url: "https://cloudlog.org/" },
             { id: "ham2kpolo", name: "Ham2K PoLo", cat: "Logging", platforms: ["ios", "android"], price: "free", desc: "Ultra-fast portable logger built exclusively for POTA/SOTA park activations.", url: "https://polo.ham2k.com/" },
-            { id: "wrl", name: "World Radio League", cat: "Logging", platforms: ["ios", "web"], price: "free", desc: "Modern web & iOS logging platform with integrated POTA spotting and cloud sync.", url: "https://worldradioleague.com/" },
+            { id: "wrl", name: "World Radio League", cat: "Logging", platforms: ["ios", "web"], price: "free", desc: "Modern web & iOS logging platform with integrated POTA spotting and cloud sync.", url: "https://worldradiolleague.com/" },
             { id: "hamrs", name: "HAMRS", cat: "Logging", platforms: ["ios", "android", "windows", "linux", "macos"], price: "freemium", desc: "Cross-platform portable contact logger with pre-built POTA, SOTA, and Field Day modes.", url: "https://hamrs.app/" },
             { id: "hamlog", name: "HamLog", cat: "Logging", platforms: ["ios"], price: "paid", desc: "Comprehensive iOS logging, solar index, tool suite, and callsign lookup app.", url: "https://apps.apple.com/us/app/hamlog/id411282466" },
             { id: "qrz", name: "QRZ.com", cat: "Logging", platforms: ["web"], price: "freemium", desc: "World standard callsign lookup database and web-connected contact logbook.", url: "https://www.qrz.com/" },
@@ -368,13 +370,13 @@
             { id: "hamlib", name: "Hamlib", cat: "Rig Control", platforms: ["windows", "linux", "macos"], price: "free", desc: "The universal open library providing backend CAT control for hundreds of transceivers.", url: "https://github.com/Hamlib/Hamlib" },
             { id: "omnirig", name: "OmniRig", cat: "Rig Control", platforms: ["windows"], price: "free", desc: "Multi-client COM component allowing several logging apps to share one radio port.", url: "http://www.dxatlas.com/omnirig/" },
             { id: "chirp", name: "CHIRP", cat: "Rig Control", platforms: ["windows", "linux", "macos"], price: "free", desc: "Standard cross-platform tool to clone and program memory channels into HTs and mobiles.", url: "https://chirp.danplanet.com/" },
-            { id: "rtsystems", name: "RT Systems", cat: "Rig Control", platforms: ["windows"], price: "paid", desc: "Commercial custom programming software and cables guaranteed to interface flawlessly.", url: "https://www.rtsystemsinc.com/" },
-            { id: "sdrpp", name: "SDR++", cat: "SDR", platforms: ["windows", "linux", "macos"], price: "free", desc: "Fast, bloat-free cross-platform SDR receiver software supporting diverse hardware.", url: "https://www.sdrplusplus.com/" },
+            { id: "rtsystems", name: "RT Systems", cat: "Rig Control", platforms: ["windows"], price: "paid", desc: "Commercial custom programming software and cables guaranteed to interface flawlessly.", url: "https://www.rtsystems.com/" },
+            { id: "sdrpp", name: "SDR++", cat: "SDR", platforms: ["windows", "linux", "macos"], price: "free", desc: "Fast, bloat-free cross-platform SDR receiver software supporting diverse hardware.", url: "https://www.sdrpp.org/" },
             { id: "sdrsharp", name: "SDR#", cat: "SDR", platforms: ["windows"], price: "free", desc: "Leading Windows SDR software with high-performance DSP algorithms.", url: "https://airspy.com/download/" },
             { id: "gqrx", name: "GQRX", cat: "SDR", platforms: ["linux", "macos"], price: "free", desc: "Open-source SDR receiver powered by GNU Radio and the Qt graphical toolkit.", url: "https://gqrx.dk/" },
             { id: "openwebrx", name: "OpenWebRX+", cat: "SDR", platforms: ["linux", "web"], price: "free", desc: "Host a multi-user browser-accessible SDR web service with built-in digital decoders.", url: "https://www.openwebrx.de/" },
             { id: "websdr", name: "WebSDR", cat: "SDR", platforms: ["web"], price: "free", desc: "Tune and listen to live HF/VHF radio receivers around the world via any browser.", url: "http://www.websdr.org/" },
-            { id: "gpredict", name: "Gpredict", cat: "Satellites", platforms: ["windows", "linux", "macos"], price: "free", desc: "Real-time satellite tracking, Doppler frequency shift calculation and rotator controller.", url: "http://gpredict.oz9aec.net/" },
+            { id: "gpredict", name: "Gpredict", cat: "Satellites", platforms: ["windows", "linux", "macos"], price: "free", desc: "Real-time satellite tracking, Doppler frequency shift calculation and rotor control.", url: "https://gpredict.oz9aec.net/" },
             { id: "look4sat", name: "Look4Sat", cat: "Satellites", platforms: ["android"], price: "free", desc: "Amateur satellite pass predictor, polar footprint chart, and TLE updater for Android.", url: "https://github.com/rtlsdrblog/look4sat" },
             { id: "amsat", name: "AMSAT Tools", cat: "Satellites", platforms: ["web"], price: "free", desc: "Official AMSAT live transponder status reports, orbital elements, and pass times.", url: "https://www.amsat.org/" },
             { id: "xastir", name: "Xastir", cat: "APRS", platforms: ["linux"], price: "free", desc: "Full-scale graphical APRS station tracker and mapper for Linux workstations.", url: "http://www.xastir.org/" },
@@ -382,17 +384,17 @@
             { id: "aprsdroid", name: "APRSdroid", cat: "APRS", platforms: ["android"], price: "free", desc: "Position beaconing, tactical messaging, and map tracking for Android devices.", url: "https://aprsdroid.org/" },
             { id: "aprsfi", name: "aprs.fi", cat: "APRS", platforms: ["web"], price: "free", desc: "Live Google Maps based global APRS vehicle, weather, and telemetry search engine.", url: "https://aprs.fi/" },
             { id: "repeaterbook", name: "RepeaterBook", cat: "Field & Reference", platforms: ["ios", "android", "web"], price: "freemium", desc: "Worldwide amateur repeater directory featuring offline GPS radius queries.", url: "https://www.repeaterbook.com/" },
-            { id: "hamalert", name: "HamAlert", cat: "Field & Reference", platforms: ["ios", "android", "web"], price: "free", desc: "Receive immediate push notifications when target DX or POTA calls appear on clusters.", url: "https://www.hamalert.org/" },
+            { id: "hamalert", name: "HamAlert", cat: "Field & Reference", platforms: ["ios", "android", "web"], price: "free", desc: "Receive immediate push notifications when target DX or POTA calls appear on cluster.", url: "https://www.hamalert.org/" },
             { id: "pota", name: "POTA.app", cat: "Field & Reference", platforms: ["web"], price: "free", desc: "Official Parks on the Air portal: live activator spot alerts, park maps, and hunters.", url: "https://pota.app/" },
             { id: "sota", name: "SOTA Database", cat: "Field & Reference", platforms: ["web"], price: "free", desc: "Summits on the Air registry: worldwide peaks, summits list, alerts, and awards.", url: "https://www.sota.org.uk/" },
             { id: "voacap", name: "VOACAP Online", cat: "Field & Reference", platforms: ["web"], price: "free", desc: "High-accuracy HF point-to-point ionospheric propagation and circuit reliability tool.", url: "https://www.voacap.com/hf/" },
             { id: "echolink", name: "EchoLink", cat: "Field & Reference", platforms: ["windows", "ios", "android"], price: "free", desc: "VoIP network connecting licensed operators to repeaters worldwide via phone or PC.", url: "https://www.echolink.org/" },
             { id: "4nec2", name: "4nec2", cat: "Antennas", platforms: ["windows"], price: "free", desc: "NEC2/NEC4 antenna modeling software with 3D radiation pattern visualization.", url: "https://www.qsl.net/4nec2/" },
             { id: "eznec", name: "EZNEC", cat: "Antennas", platforms: ["windows"], price: "free", desc: "Roy Lewallen's famous antenna analysis and modeling tool (now available fully free).", url: "https://www.eznec.com/" },
-            { id: "hamstudy", name: "HamStudy.org", cat: "Learning", platforms: ["web", "ios", "android"], price: "free", desc: "Adaptive flashcards and testing for Technician, General, and Extra FCC exam pools.", url: "https://hamstudy.org/" },
+            { id: "hamstudy", name: "HamStudy.org", cat: "Learning", platforms: ["web", "ios", "android"], price: "free", desc: "Adaptive flashcards and testing for Technician, General, and Extra FCC exams.", url: "https://hamstudy.org/" },
             { id: "hamradioprep", name: "Ham Radio Prep", cat: "Learning", platforms: ["ios", "web"], price: "freemium", desc: "Structured video courses and prep exams for US ham radio licensing.", url: "https://hamradioprep.com/" },
             { id: "lcwo", name: "LCWO.net", cat: "Learning", platforms: ["web"], price: "free", desc: "Learn Morse Code Online using the Koch method with customizable speeds.", url: "https://lcwo.net/" },
-            { id: "kochtrainer", name: "Koch Trainer", cat: "Learning", platforms: ["android"], price: "free", desc: "Dedicated Morse code trainer app for mobile practice on Android.", url: "https://play.google.com/store/apps/details?id=com.commonsourcelab.learnMorseWithKoch" }
+            { id: "kochtrainer", name: "Koch Trainer", cat: "Learning", platforms: ["android"], price: "free", desc: "Dedicated Morse code trainer app for mobile practice on Android.", url: "https://play.google.com/store/apps/details?id=com.commonsource.lab.learnMorseWithKoch" }
         ];
 
         const KIT_PRESETS = {
@@ -403,7 +405,7 @@
         };
 
         const MORSE_MAP = {
-            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', ' ': '/', '?': '..--..', '/': '-..-.', '.': '.-.-.-'
+            'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.', 'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---', 'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---', 'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-', 'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--', 'Z': '--..', '0': '-----', '1': '.----', '2': '..---', '3': '...--', '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..', '9': '----.', ' ': '/', '.': '.-.-.-', ',': '--..--', '?': '..--..', '/': '-..-.', '@': '.--.-.'
         };
 
         let activeCategory = 'all';
@@ -546,11 +548,14 @@
         function initFilterButtons() {
             const categories = ["all", ...new Set(APPS_DATABASE.map(a => a.cat))];
             const platforms = ["all", "windows", "linux", "macos", "ios", "android", "web"];
-            document.getElementById('catBtnContainer').innerHTML = categories.map(cat => `
-                <button onclick="setCategory('${cat}')" id="cat-btn-${cat.replace(/\s+/g,'')}" class="whitespace-nowrap px-3 py-1 rounded text-[11px] font-mono border transition ${activeCategory === cat ? 'bg-cyan-500 text-black border-cyan-400 font-bold' : 'bg-tactical-950 text-slate-300 border-tactical-border hover:border-cyan-400'}">
+
+            const categoryFilter = document.getElementById('categoryFilter');
+            categoryFilter.innerHTML = categories.map(cat => `
+                <option value="${cat}" ${activeCategory === cat ? 'selected' : ''}>
                     ${cat === 'all' ? 'All Categories' : cat}
-                </button>
+                </option>
             `).join('');
+
             document.getElementById('platformBtnContainer').innerHTML = platforms.map(plat => `
                 <button onclick="setPlatform('${plat}')" id="plat-btn-${plat}" class="px-2.5 py-1 rounded text-[11px] font-mono border transition capitalize ${activePlatform === plat ? 'bg-cyan-500 text-black border-cyan-400 font-bold' : 'bg-tactical-950 text-slate-300 border-tactical-border hover:border-cyan-400'}">
                     ${plat === 'all' ? 'All OS' : plat}
@@ -595,9 +600,30 @@
                 const isFav = favorites.includes(app.id);
                 return `
                     <div class="bg-tactical-900 border border-tactical-border hover:border-cyan-500/70 rounded-xl p-4 flex flex-col justify-between transition-all duration-200 group shadow">
-                        <div><div class="flex items-start justify-between gap-2 mb-1.5"><h3 class="text-sm font-bold text-white group-hover:text-cyan-300 transition flex items-center gap-1.5">${app.name}</h3><div class="flex items-center gap-1">${getLicenseBadge(app.price)}<button onclick="toggleFav('${app.id}')" title="Save Favorite" class="p-1 hover:text-amber-400 transition"><i data-lucide="star" class="w-3.5 h-3.5 ${isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-600'}"></i></button></div></div><div class="text-[10px] font-mono text-cyan-400 uppercase tracking-wider mb-2">${app.cat}</div><p class="text-xs text-slate-400 leading-relaxed mb-3">${app.desc}</p></div>
-                        <div><div class="flex flex-wrap gap-1 mb-3">${app.platforms.map(p => `<span class="px-1.5 py-0.5 rounded bg-tactical-950 border border-tactical-border text-[9px] font-mono uppercase text-slate-300">${p}</span>`).join('')}</div><a href="${app.url}" target="_blank" class="w-full py-2 rounded-lg bg-tactical-950 hover:bg-blue-600 border border-tactical-border hover:border-blue-500 text-slate-200 hover:text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition"><span>Launch Software</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a></div>
-                    </div>`;
+                        <div>
+                            <div class="flex items-start justify-between gap-2 mb-1.5">
+                                <h3 class="text-sm font-bold text-white group-hover:text-cyan-300 transition flex items-center gap-1.5">${app.name}</h3>
+                                <button onclick="toggleFav('${app.id}')" class="text-slate-400 hover:text-amber-300 transition" aria-label="Toggle favorite">
+                                    <i data-lucide="star" class="w-3.5 h-3.5 ${isFav ? 'fill-amber-400 text-amber-400' : 'text-slate-400'}"></i>
+                                </button>
+                            </div>
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                ${getLicenseBadge(app.price)}
+                                <span class="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-tactical-950 border border-tactical-border text-slate-300 uppercase">${app.cat}</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400 leading-relaxed mb-3">${app.desc}</p>
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap gap-1 mb-3">
+                                ${app.platforms.map(p => `<span class="px-1.5 py-0.5 rounded bg-tactical-950 border border-tactical-border text-[9px] font-mono uppercase text-slate-300">${p}</span>`).join('')}
+                            </div>
+                            <a href="${app.url}" target="_blank" class="w-full py-2 rounded-lg bg-tactical-950 border border-tactical-border hover:border-cyan-500/70 text-cyan-300 text-xs font-semibold flex items-center justify-center gap-1.5 transition">
+                                Launch Software
+                                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                            </a>
+                        </div>
+                    </div>
+                `;
             }).join('');
             lucide.createIcons();
         }
@@ -632,7 +658,7 @@
             document.getElementById('kitSelectedCount').textContent = selectedKitApps.size;
             container.innerHTML = APPS_DATABASE.map(app => {
                 const checked = selectedKitApps.has(app.id);
-                return `<label class="flex items-start gap-2.5 p-2.5 rounded-lg border transition cursor-pointer ${checked ? 'bg-tactical-950 border-cyan-500/60' : 'bg-tactical-950/40 border-tactical-border/60 opacity-60'}"><input type="checkbox" onchange="toggleKitItem('${app.id}')" ${checked ? 'checked' : ''} class="mt-1 accent-cyan-400 rounded"><div class="flex-1 min-w-0"><div class="flex items-center justify-between"><span class="text-xs font-bold text-white truncate">${app.name}</span><span class="text-[9px] font-mono text-cyan-400 uppercase">${app.cat}</span></div><p class="text-[11px] text-slate-400 truncate">${app.desc}</p></div></label>`;
+                return `<label class="flex items-start gap-2.5 p-2.5 rounded-lg border transition cursor-pointer ${checked ? 'bg-tactical-950 border-cyan-500/60' : 'bg-tactical-950/40 border-tactical-border/60 opacity-60'}"><input type="checkbox" onchange="toggleKitItem('${app.id}')" ${checked ? 'checked' : ''} class="mt-1 accent-cyan-400"><div class="flex-1 min-w-0"><div class="flex items-center justify-between gap-2"><span class="text-sm font-bold text-white truncate">${app.name}</span><span class="text-[9px] font-mono uppercase text-cyan-300">${app.cat}</span></div><p class="text-[11px] text-slate-400 mt-1 line-clamp-2">${app.desc}</p></div></label>`;
             }).join('');
         }
         function copyKitList() {
