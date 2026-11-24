@@ -161,7 +161,7 @@
     <main class="max-w-7xl mx-auto px-4 py-5 flex-1 w-full space-y-4">
       <details id="section-directory" class="accordion-panel" open>
         <summary class="accordion-summary">
-          <span><span class="section-kicker">01</span> Software & Apps Directory <small>Search and filter amateur-radio software and resources</small></span>
+          <span><span class="section-kicker">01</span> Software & Apps Directory <small>Search and filter amateur-radio software</small></span>
           <span class="accordion-chevron">＋</span>
         </summary>
         <div class="accordion-content space-y-6">
@@ -206,16 +206,6 @@
             <i data-lucide="radio" class="w-10 h-10 text-slate-500 mx-auto mb-2 animate-bounce"></i>
             <p class="text-sm font-bold text-slate-300">No applications match your criteria</p>
             <p class="text-xs text-slate-500 mt-1">Try resetting platform or category filters.</p>
-        </div>
-        <div class="mt-6 rounded-xl border border-cyan-500/30 bg-slate-950/70 p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-                <h3 class="text-base font-bold text-white">RMS Radar</h3>
-                <p class="text-sm text-slate-400 mt-1">Radio Message Server monitoring and propagation resource.</p>
-                <p class="text-xs text-slate-500 mt-2">rmsradar.ku0hn.radio</p>
-            </div>
-            <a href="https://rmsradar.ku0hn.radio/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 rounded-lg bg-cyan-700 hover:bg-cyan-600 border border-cyan-500 px-5 py-3 text-sm font-bold text-white transition whitespace-nowrap">
-                Open RMS Radar <span aria-hidden="true">↗</span>
-            </a>
         </div>
         </div>
       </details>
@@ -402,7 +392,8 @@
             { id: "hamstudy", name: "HamStudy.org", cat: "Learning", platforms: ["web", "ios", "android"], price: "free", desc: "Adaptive flashcards and testing for Technician, General, and Extra FCC exam pools.", url: "https://hamstudy.org/" },
             { id: "hamradioprep", name: "Ham Radio Prep", cat: "Learning", platforms: ["ios", "web"], price: "freemium", desc: "Structured video courses and prep exams for US ham radio licensing.", url: "https://hamradioprep.com/" },
             { id: "lcwo", name: "LCWO.net", cat: "Learning", platforms: ["web"], price: "free", desc: "Learn Morse Code Online using the Koch method with customizable speeds.", url: "https://lcwo.net/" },
-            { id: "kochtrainer", name: "Koch Trainer", cat: "Learning", platforms: ["android"], price: "free", desc: "Dedicated Morse code trainer app for mobile practice on Android.", url: "https://play.google.com/store/apps/details?id=com.commonsourcelab.learnMorseWithKoch" }
+            { id: "kochtrainer", name: "Koch Trainer", cat: "Learning", platforms: ["android"], price: "free", desc: "Dedicated Morse code trainer app for mobile practice on Android.", url: "https://play.google.com/store/apps/details?id=com.commonsourcelab.learnMorseWithKoch" },
+            { id: "rmsradar", name: "RMS Radar", cat: "Learning", platforms: ["web"], price: "free", desc: "Web-based RMS radio monitoring and propagation radar resource.", url: "https://rmsradar.ku0hn.radio/" }
         ];
 
         const KIT_PRESETS = {
