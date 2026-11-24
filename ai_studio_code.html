@@ -335,13 +335,13 @@
     <!-- APP ENGINE SCRIPT -->
     <script>
         const APPS_DATABASE = [
-            { id: "wsjtx", name: "WSJT-X", cat: "Digital Modes", platforms: ["windows", "linux", "macos"], price: "free", desc: "The gold standard for FT8, FT4, Q65 and weak DX protocols.", url: "https://wsjt.sourceforge.io/wsjtx.html" },
+            { id: "wsjtx", name: "WSJT-X", cat: "Digital Modes", platforms: ["windows", "linux", "macos"], price: "free", desc: "The gold standard for FT8, FT4, Q65 and weak DX protocols.", url: "https://wsjtx.github.io/wsjtx/index.html" },
             { id: "js8call", name: "JS8Call", cat: "Digital Modes", platforms: ["windows", "linux", "macos"], price: "free", desc: "Keyboard-to-keyboard ragchew messaging and relays built on FT8 modulation.", url: "http://js8call.com/" },
             { id: "fldigi", name: "fldigi / NBEMS", cat: "Digital Modes", platforms: ["windows", "linux", "macos"], price: "free", desc: "Multi-mode digital modem (PSK31, RTTY, Olivia) with flmsg ICS message forms.", url: "http://www.w1hkj.com/" },
-            { id: "jtdx", name: "JTDX", cat: "Digital Modes", platforms: ["windows", "linux"], price: "free", desc: "Optimized FT8/FT4 decoder for crowded bands and weak DX reception.", url: "https://www.jtdx.tech/" },
+            { id: "jtdx", name: "JTDX", cat: "Digital Modes", platforms: ["windows", "linux"], price: "free", desc: "Optimized FT8/FT4 decoder for crowded bands and weak DX reception.", url: "https://github.com/jtdx-project/jtdx" },
             { id: "varac", name: "VarAC", cat: "Digital Modes", platforms: ["windows"], price: "free", desc: "HF keyboard chat and file transfer application over VARA HF modems.", url: "https://www.varac-hamradio.com/" },
             { id: "ft8cn", name: "FT8CN", cat: "Digital Modes", platforms: ["android"], price: "free", desc: "Complete native FT8 decoder/transmitter on Android phones via USB OTG or audio cable.", url: "https://github.com/n0boy/ft8cn" },
-            { id: "qft8", name: "qFT8 / SimpleFT8", cat: "Digital Modes", platforms: ["android"], price: "free", desc: "Lightweight FT8/FT4 receive and transmit with direct CAT rig control on Android.", url: "https://github.com/kg5d/qFT8" },
+            { id: "qft8", name: "qFT8 / SimpleFT8", cat: "Digital Modes", platforms: ["android"], price: "free", desc: "Lightweight FT8/FT4 receive and transmit with direct CAT rig control on Android.", url: "https://qft8.com/" },
             { id: "pocketft8", name: "Pocket FT8", cat: "Digital Modes", platforms: ["ios", "macos"], price: "free", desc: "Full FT8 transceiver with logbook for iOS, iPadOS and Apple Silicon Mac.", url: "https://apps.apple.com/us/app/pocket-ft8/id1573031024" },
             { id: "ftham", name: "FT Ham", cat: "Digital Modes", platforms: ["ios"], price: "freemium", desc: "iOS audio DSP decoder and transmitter for FT8/FT4 with live waterfall display.", url: "https://ftham.turrion.dev/" },
             { id: "greylineft8", name: "Greyline FT8", cat: "Digital Modes", platforms: ["ios"], price: "freemium", desc: "Tactical field-optimized FT8/FT4 application designed for portable Apple devices.", url: "https://apps.apple.com/us/app/greyline-ft8/id6773455172" },
@@ -412,7 +412,7 @@
         let showFavoritesOnly = false;
         let soundEnabled = true;
         let selectedKitApps = new Set(KIT_PRESETS.pota.apps);
-        // Browser storage is optional; it must never prevent the 58-app directory from loading.
+        // Browser storage is optional; it must never prevent the application directory from loading.
         let favorites = (() => {
             try {
                 const saved = JSON.parse(window.localStorage.getItem('w0emz_favorites') || '[]');
@@ -430,7 +430,7 @@
         let isMorsePlaying = false;
         let morseTimeouts = [];
 
-        window.addEventListener('DOMContentLoaded', () => {
+        function initializeResourceCenter() {
             try { initClock(); } catch (error) { console.warn('Clock could not initialize:', error); }
             try { initFilterButtons(); } catch (error) { console.error('Directory filters could not initialize:', error); }
             try { applyFilters(); } catch (error) {
@@ -444,7 +444,12 @@
             try { updateFavBadge(); } catch (error) { console.warn('Favorites badge could not initialize:', error); }
             refreshIcons();
             try { initMorseWatcher(); } catch (error) { console.warn('CW input watcher could not initialize:', error); }
-        });
+        }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeResourceCenter, { once: true });
+        } else {
+            initializeResourceCenter();
+        }
 
         function initClock() {
             function update() {
@@ -616,7 +621,7 @@
                 return `
                     <div class="bg-tactical-900 border border-tactical-border hover:border-cyan-500/70 rounded-xl p-4 flex flex-col justify-between transition-all duration-200 group shadow">
                         <div><div class="flex items-start justify-between gap-2 mb-1.5"><h3 class="text-sm font-bold text-white group-hover:text-cyan-300 transition flex items-center gap-1.5">${app.name}</h3><div class="flex items-center gap-1">${getLicenseBadge(app.price)}<button onclick="toggleFav('${app.id}')" title="Save Favorite" class="p-1 hover:text-amber-400 transition"><i data-lucide="star" class="w-3.5 h-3.5 ${isFav ? 'text-amber-400 fill-amber-400' : 'text-slate-600'}"></i></button></div></div><div class="text-[10px] font-mono text-cyan-400 uppercase tracking-wider mb-2">${app.cat}</div><p class="text-xs text-slate-400 leading-relaxed mb-3">${app.desc}</p></div>
-                        <div><div class="flex flex-wrap gap-1 mb-3">${app.platforms.map(p => `<span class="px-1.5 py-0.5 rounded bg-tactical-950 border border-tactical-border text-[9px] font-mono uppercase text-slate-300">${p}</span>`).join('')}</div><a href="${app.url}" target="_blank" class="w-full py-2 rounded-lg bg-tactical-950 hover:bg-blue-600 border border-tactical-border hover:border-blue-500 text-slate-200 hover:text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition"><span>Launch Software</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a></div>
+                        <div><div class="flex flex-wrap gap-1 mb-3">${app.platforms.map(p => `<span class="px-1.5 py-0.5 rounded bg-tactical-950 border border-tactical-border text-[9px] font-mono uppercase text-slate-300">${p}</span>`).join('')}</div><a href="${app.url}" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-lg bg-tactical-950 hover:bg-blue-600 border border-tactical-border hover:border-blue-500 text-slate-200 hover:text-white text-xs font-semibold flex items-center justify-center gap-1.5 transition"><span>Launch Software</span><i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i></a></div>
                     </div>`;
             }).join('');
             refreshIcons();
