@@ -327,13 +327,30 @@
             <div><p class="text-slate-300 font-bold">Detroit Lakes Amateur Radio Club (WØEMZ)</p><p class="text-[11px]">Celebrating amateur radio service and community preparedness since 1956.</p></div>
             <div class="flex items-center gap-4 text-[11px]">
                 <a href="https://www.w0emz.org/home" target="_blank" class="text-cyan-400 hover:underline">Official Club Portal</a><span>•</span>
-                <a href="https://sourceforge.net/directory/ham-radio/" target="_blank" class="text-slate-400 hover:text-white">SourceForge Open Source Ham Repo</a>
+                <a href="https://sourceforge.net/directory/ham-radio/" target="_blank" class="text-slate-400 hover:text-white">SourceForge Open Source Ham Repo</a><span>•</span>
+                <a href="mailto:erickj6ewi@gmail.com?subject=W0EMZ%20Website%20Broken%20Link" onclick="return openBrokenLinkReport();" class="text-amber-300 hover:text-amber-200 hover:underline">Report a Broken Link</a>
             </div>
         </div>
     </footer>
 
     <!-- APP ENGINE SCRIPT -->
     <script>
+        function openBrokenLinkReport() {
+            const subject = 'W0EMZ Website - Broken Link Report';
+            const body = [
+                'I found a broken link on the W0EMZ Ham Radio Tools website.',
+                '',
+                'Page where the problem appears: ' + window.location.href,
+                'Broken link or resource: ',
+                '',
+                'What happened when you clicked it? ',
+                '',
+                'Thank you for helping improve the W0EMZ resource directory.'
+            ].join('\n');
+            window.location.href = 'mailto:erickj6ewi@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+            return false;
+        }
+
         const APPS_DATABASE = [
             { id: "wsjtx", name: "WSJT-X", cat: "Digital Modes", platforms: ["windows", "linux", "macos"], price: "free", desc: "The gold standard for FT8, FT4, Q65 and weak DX protocols.", url: "https://wsjt.sourceforge.io/wsjtx.html" },
             { id: "js8call", name: "JS8Call", cat: "Digital Modes", platforms: ["windows", "linux", "macos"], price: "free", desc: "Keyboard-to-keyboard ragchew messaging and relays built on FT8 modulation.", url: "http://js8call.com/" },
